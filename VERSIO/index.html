@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob: https://api.dictionaryapi.dev https://app.sdarm.org;">
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob: https://api.dictionaryapi.dev https://app.sdarm.org https://en.wiktionary.org;">
     <title>VERSIO</title>
     <style>
         :root {
@@ -48,10 +48,8 @@
 
         #word-section {
             text-align: center; margin-bottom: calc(16px * var(--scale)); cursor: pointer;
-            padding: calc(13px * var(--scale)) 15px; background: rgba(255,255,255,0.03); border-radius: 8px;
-            transition: background 0.2s;
+            padding: calc(13px * var(--scale)) 15px;
         }
-        #word-section:hover { background: rgba(255,255,255,0.06); }
 
         #w-en { font-size: calc(24px * var(--scale)); font-weight: 600; color: #e8c97a; margin-bottom: 4px; text-transform: capitalize; letter-spacing: 0.5px; }
         #word-counter { font-size: calc(9px * var(--scale)); color: #555; text-align: center; margin-top: 6px; letter-spacing: 1px; }
@@ -61,7 +59,6 @@
         #ex-en { font-size: calc(12px * var(--scale)); color: #d0d0d0; line-height: 1.5; text-align: center; min-height: 18px; }
 
         #synodal-box { border-top: 1px solid var(--div); padding: calc(12px * var(--scale)) 0 0; margin-top: auto; }
-        #synodal-lbl { font-size: calc(8px * var(--scale)); color: var(--dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; text-align: center; }
         #v-ru { font-size: calc(11px * var(--scale)); color: #888; text-align: center; line-height: 1.5; min-height: 14px; }
         #v-ru-ref { font-size: calc(9px * var(--scale)); color: #555; text-align: center; letter-spacing: 1px; text-transform: uppercase; margin-top: 5px; }
 
@@ -89,7 +86,6 @@
         </div>
 
         <div id="synodal-box">
-            <div id="synodal-lbl">Перевод стиха</div>
             <div id="v-ru">...</div>
             <div id="v-ru-ref"></div>
         </div>
@@ -98,10 +94,13 @@
     <div id="error-msg"></div>
 
     <script>
+        const BIBLE = { en: "en-kjv", ru: "ru-rst" };
+
         const state = { en: "", ru: "", ref: "", words: [], idx: 0, vocabCache: {} };
         let loading = false;
         let versePool = [];
         let verseIdx = 0;
+        const bibles = {};
 
         const STOP_WORDS = new Set([
             "the","and","of","to","in","that","is","he","for","it","as","was","with","be","on","at","by","not","this","but","from","they","his","her","she","him","my","me","you","your","are","have","had","do","does","did","will","shall","can","could","would","should","an","or","so","if","all","into","upon","unto","their","them","who","what","which","then","when","were","been","hath","thou","thee","thy","said","also","even","now","yet","let","its","has","more","those","such","over","only","these","here","out","about","just","been","should","could","would","have","there","these","should","than"
@@ -124,67 +123,136 @@
 
         function stripHtml(s) { return (s || "").replace(/<[^>]*>/g, "").trim(); }
 
-        async function fetchLessons(lang) {
-            const today = new Date();
-            const y = today.getFullYear();
-            const q = quarterOf(today);
-            const url = `https://app.sdarm.org/sbl/data/${lang}/${lang}-${y}-${q}.json`;
+        /* ---------------- lesson lookup ---------------- */
 
+        async function fetchQuarter(lang, y, q) {
+            const url = `https://app.sdarm.org/sbl/data/${lang}/${lang}-${y}-${q}.json`;
             try {
                 const r = await fetch(url);
                 if (!r.ok) return null;
-                const data = await r.json();
-                const target = ymd(today);
-
-                if (!data?.lessons) return null;
-
-                for (const lesson of data.lessons) {
-                    if (lesson.date === target) return lesson;
-                }
-                return null;
+                return await r.json();
             } catch(e) {
-                console.error(`Failed to fetch ${lang} lesson:`, e);
                 return null;
             }
         }
 
-        function extractVersesFromLesson(enLesson, ruLesson) {
-            const verses = [];
+        // Daily readings run Sun-Fri before the Sabbath, so today's date can
+        // sit in a quarter file adjacent to the calendar quarter.
+        async function findTodayDay(lang) {
+            const today = new Date();
+            const target = ymd(today);
+            const y = today.getFullYear();
+            const q = quarterOf(today);
+            const candidates = [[y, q], q === 1 ? [y - 1, 4] : [y, q - 1], q === 4 ? [y + 1, 1] : [y, q + 1]];
 
-            if (!enLesson || !enLesson.dailyLessons) return verses;
+            for (const [cy, cq] of candidates) {
+                const data = await fetchQuarter(lang, cy, cq);
+                if (!data?.lessons) continue;
+                for (const lesson of data.lessons) {
+                    for (const day of lesson.dailyLessons || []) {
+                        if (day.date === target) return { lesson, day };
+                    }
+                    if (lesson.date === target) return { lesson, day: null };
+                }
+            }
+            return null;
+        }
 
-            for (const day of enLesson.dailyLessons) {
-                if (!day.steps) continue;
-                for (const step of day.steps) {
-                    if (!step.verses) continue;
-                    for (const v of step.verses) {
-                        if (!v.text) continue;
-                        verses.push({
-                            text: stripHtml(v.text),
-                            ref: v.ref || "–",
-                            ru: ""
-                        });
+        // Pull every Bible citation (sOsis reference) out of a day's questions,
+        // keeping the human-readable label the lesson itself printed next to it.
+        function collectRefs(lesson, day) {
+            const refs = [];
+            const seen = new Set();
+
+            function addRef(label, sOsis) {
+                if (!sOsis || seen.has(sOsis)) return;
+                seen.add(sOsis);
+                refs.push({ label: label.replace(/[;,.\s]+$/, "").trim(), sOsis });
+            }
+
+            if (lesson?.keyText?.ref) {
+                addRef(lesson.keyText.ref.text || "", lesson.keyText.ref.sOsis);
+            }
+
+            if (day?.subsections) {
+                for (const sub of day.subsections) {
+                    for (const frag of sub.q || []) {
+                        if (frag.sOsis) addRef(frag.text || "", frag.sOsis);
                     }
                 }
             }
 
-            if (ruLesson && ruLesson.dailyLessons) {
-                let ruIdx = 0;
-                for (const day of ruLesson.dailyLessons) {
-                    if (!day.steps) continue;
-                    for (const step of day.steps) {
-                        if (!step.verses) continue;
-                        for (const v of step.verses) {
-                            if (v.text && ruIdx < verses.length) {
-                                verses[ruIdx].ru = stripHtml(v.text);
-                                ruIdx++;
-                            }
-                        }
+            return refs;
+        }
+
+        /* ---------------- full bible lookup ---------------- */
+
+        function loadBible(version) {
+            if (bibles[version]) return bibles[version];
+            const url = `https://app.sdarm.org/bible/data/${version}.json`;
+            bibles[version] = fetch(url).then(r => {
+                if (!r.ok) throw new Error("HTTP " + r.status);
+                return r.json();
+            }).catch(e => { delete bibles[version]; throw e; });
+            return bibles[version];
+        }
+
+        function parseSeg(seg) {
+            const dash = seg.split("-");
+            const a = dash[0].split(".");
+            const b = (dash[1] || dash[0]).split(".");
+            return { book: a[0], chap: +a[1], v1: +a[2], echap: +(b[1] || a[1]), v2: +(b[2] || a[2]) };
+        }
+
+        // A reference a little too long or with a versification quirk still
+        // returns what it can rather than nothing at all.
+        function versesIn(books, sOsis) {
+            const rows = [];
+            for (const raw of String(sOsis).split(",")) {
+                const seg = parseSeg(raw.trim());
+                const chapters = books && books[seg.book];
+                if (!chapters) continue;
+                for (let c = seg.chap; c <= seg.echap; c++) {
+                    const vs = chapters[c - 1];
+                    if (!vs || !vs.length) continue;
+                    let from = (c === seg.chap) ? seg.v1 : 1;
+                    let to = (c === seg.echap) ? seg.v2 : vs.length;
+                    if (to > vs.length) to = vs.length;
+                    if (from === vs.length + 1 && seg.book !== "Ps") from = vs.length;
+                    for (let n = from; n <= to; n++) {
+                        const t = vs[n - 1];
+                        if (t == null) continue;
+                        rows.push(stripHtml(String(t)));
                     }
                 }
             }
+            return rows.join(" ");
+        }
 
-            return verses;
+        async function getVerseText(sOsis, lang) {
+            try {
+                const bible = await loadBible(BIBLE[lang]);
+                return versesIn(bible?.books || {}, sOsis);
+            } catch(e) {
+                return "";
+            }
+        }
+
+        async function buildVersePool() {
+            const en = await findTodayDay('en');
+            if (!en) return [];
+
+            const refs = collectRefs(en.lesson, en.day);
+            if (refs.length === 0) return [];
+
+            const pool = [];
+            for (const ref of refs) {
+                const enText = await getVerseText(ref.sOsis, 'en');
+                if (!enText) continue;
+                const ruText = await getVerseText(ref.sOsis, 'ru');
+                pool.push({ text: enText, ref: ref.label, ru: ruText });
+            }
+            return pool;
         }
 
         function extractWords(text) {
@@ -205,25 +273,51 @@
             update(state.words[0]);
         }
 
-        async function getWordExample(word) {
-            if (state.vocabCache[word]) return state.vocabCache[word];
-
+        async function fromFreeDictionary(word) {
             try {
                 const r = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
-                if (!r.ok) throw new Error("Not found");
+                if (!r.ok) return null;
                 const data = await r.json();
 
-                if (data?.[0]?.meanings) {
-                    for (const m of data[0].meanings) {
-                        if (m.definitions?.[0]?.example) {
-                            state.vocabCache[word] = m.definitions[0].example;
-                            return state.vocabCache[word];
+                for (const entry of data || []) {
+                    for (const m of entry.meanings || []) {
+                        for (const def of m.definitions || []) {
+                            if (def.example) return def.example;
                         }
                     }
                 }
             } catch(e) {}
+            return null;
+        }
 
-            state.vocabCache[word] = "(example not found)";
+        async function fromWiktionary(word) {
+            try {
+                const r = await fetch(`https://en.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(word)}`);
+                if (!r.ok) return null;
+                const data = await r.json();
+                const en = data && data.en;
+                if (!en) return null;
+
+                for (const block of en) {
+                    for (const def of block.definitions || []) {
+                        if (def.parsedExamples?.[0]?.example) {
+                            return stripHtml(def.parsedExamples[0].example);
+                        }
+                        if (def.examples?.length) {
+                            return stripHtml(def.examples[0]);
+                        }
+                    }
+                }
+            } catch(e) {}
+            return null;
+        }
+
+        async function getWordExample(word) {
+            if (state.vocabCache[word]) return state.vocabCache[word];
+
+            const example = (await fromFreeDictionary(word)) || (await fromWiktionary(word));
+
+            state.vocabCache[word] = example || "(example not found)";
             return state.vocabCache[word];
         }
 
@@ -284,30 +378,17 @@
             document.getElementById('error-msg').style.display = 'none';
 
             try {
-                const [enLesson, ruLesson] = await Promise.all([
-                    fetchLessons('en'),
-                    fetchLessons('ru')
-                ]);
-
-                versePool = extractVersesFromLesson(enLesson, ruLesson);
-
-                if (versePool.length === 0) {
-                    versePool = FALLBACK;
-                }
-
-                verseIdx = 0;
-                document.getElementById('loader').style.display = 'none';
-                loading = false;
-                loadVerse();
-
+                versePool = await buildVersePool();
+                if (versePool.length === 0) versePool = FALLBACK;
             } catch(e) {
                 console.error('Init error:', e);
                 versePool = FALLBACK;
-                verseIdx = 0;
-                document.getElementById('loader').style.display = 'none';
-                loading = false;
-                loadVerse();
             }
+
+            verseIdx = 0;
+            document.getElementById('loader').style.display = 'none';
+            loading = false;
+            loadVerse();
         }
 
         document.getElementById('verse-section').onclick = () => {

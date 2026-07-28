@@ -12,3 +12,5 @@ build/
 *.log
 package-lock.json
 generate-screenshots.js
+generate-icons.js
+icon-gen.html

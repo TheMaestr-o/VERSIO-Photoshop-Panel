@@ -6,11 +6,10 @@
 **English text. Russian translation. Vocabulary practice.**  
 Daily Scripture lessons while you work.
 
-[![Download](https://img.shields.io/badge/Download-v5.1.0-blue.svg)](https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/releases/download/v5.1.0/VERSIO.zip)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-![Photoshop](https://img.shields.io/badge/Photoshop-2020%E2%80%942025-blue.svg)
+![Photoshop](https://img.shields.io/badge/Photoshop-2020%E2%80%942026-blue.svg)
 
-[What is VERSIO?](#what-is-versio) • [Install](#quick-install) • [How to Use](#how-to-use) • [Features](#features)
+[What is VERSIO?](#what-is-versio) • [Install](#install) • [How to Use](#how-to-use) • [Features](#features)
 
 ---
 
@@ -28,15 +27,24 @@ You spend hours in Photoshop. You want to study Scripture daily. But switching b
 
 ## What is VERSIO?
 
-A **CEP panel** for Adobe Photoshop that displays:
+A Photoshop panel that displays:
 
-- Today's Bible passages from the Sabbath School lesson
+- Today's Bible passages, cited from the Sabbath School lesson and quoted from the full Bible text
 - English text (King James Version)
 - Russian translation (Synodal Version)
 - Vocabulary study — click words to learn definitions
-- Real dictionary examples for each word
+- Real dictionary examples for each word, with a second dictionary as fallback
 
 Live data from **SDARM**. No manual updates. No configuration. Install once, it works.
+
+**Two editions, same panel:**
+
+| Edition | Photoshop | Folder |
+|---|---|---|
+| **UXP** (recommended) | 2024–2026 and later | [`VERSIO-UXP/`](VERSIO-UXP/) |
+| **CEP** (legacy) | 2020–2025 | [`VERSIO/`](VERSIO/) |
+
+Photoshop replaced its old CEP extension system with UXP starting around 2024; by 2026 CEP no longer loads third-party panels at all. Install the edition that matches your Photoshop version — see [Install](#install).
 
 ---
 
@@ -56,50 +64,41 @@ English + Russian side by side. Click to learn. Dark theme optimized for focus.
 
 ---
 
-## Quick Install
+## Install
 
-### For Mac
+### UXP edition — Photoshop 2024–2026+
 
-**1 minute setup:**
+UXP plugins load either through the **UXP Developer Tool** (Adobe's official loader) or by placing the plugin directly in Photoshop's external plugins folder.
 
-```bash
-# Download the panel
-curl -L https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/releases/download/v5.1.0/VERSIO.zip -o ~/Downloads/VERSIO.zip
+**Option A — UXP Developer Tool (recommended):**
 
-# Extract
-unzip ~/Downloads/VERSIO.zip -d ~/Library/Application\ Support/Adobe/CEP/extensions/
+1. Install [Adobe UXP Developer Tool](https://developer.adobe.com/photoshop/uxp/2022/guides/devtool/) (free, from Adobe)
+2. In UDT, click **Add Plugin** and select the [`VERSIO-UXP/manifest.json`](VERSIO-UXP/manifest.json) file
+3. Click **Load** next to the plugin, with Photoshop running
+4. Find VERSIO under **Plugins → VERSIO**
 
-# Restart Photoshop
-```
+**Option B — manual sideload (no UDT needed):**
 
-Then: **Window → VERSIO**
+1. Download or clone this repository
+2. Copy the `VERSIO-UXP` folder to:
+   - **Mac**: `/Library/Application Support/Adobe/UXP/Plugins/External/com.maestro.versio/`
+   - **Windows**: `C:\Program Files\Common Files\Adobe\UXP\Plugins\External\com.maestro.versio\`
+   (rename the copied folder to `com.maestro.versio` if it isn't already)
+3. Restart Photoshop
+4. Find VERSIO under **Plugins → VERSIO**
 
-### For Windows
+### CEP edition — Photoshop 2020–2025
 
-```bash
-# Download: https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/releases/download/v5.1.0/VERSIO.zip
-# Extract to: C:\Users\<Your Username>\AppData\Roaming\Adobe\CEP\extensions\
-# Restart Photoshop
-```
-
-Then: **Window → VERSIO**
-
-### Manual Install (Any OS)
-
-1. [Download VERSIO.zip](https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/releases/download/v5.1.0/VERSIO.zip)
+1. Download or clone this repository
 2. Copy the `VERSIO` folder to your CEP extensions directory:
    - **Mac**: `~/Library/Application Support/Adobe/CEP/extensions/`
    - **Windows**: `C:\Users\<Your Username>\AppData\Roaming\Adobe\CEP\extensions\`
 3. Restart Photoshop
-4. Open Window → VERSIO
+4. Find VERSIO under **Window → VERSIO**
 
 ---
 
 ## How to Use
-
-### Launching
-
-After install, VERSIO appears in your **Window** menu. Click **Window → VERSIO** to open.
 
 ### Navigation
 
@@ -108,7 +107,7 @@ After install, VERSIO appears in your **Window** menu. Click **Window → VERSIO
 | Click on the verse | Loads the next Bible passage |
 | Click on the word | Shows the next vocabulary term |
 | Read the example | Understand the word in context |
-| Read Russian translation | Compare both versions |
+| Read the text below the divider | Compare the Russian translation |
 
 ### Layout
 
@@ -127,14 +126,13 @@ After install, VERSIO appears in your **Window** menu. Click **Window → VERSIO
 │  "She believed his promise"     │
 │                                 │
 ├─────────────────────────────────┤
-│  Перевод стиха                  │
 │  Ибо так возлюбил Бог мир...    │
 │                       John 3:16 │
 │                                 │
 └─────────────────────────────────┘
 
 Width:  300px
-Height: 550px
+Height: 550px (fixed — not resizable)
 Theme:  Dark (optimized for long sessions)
 ```
 
@@ -142,13 +140,13 @@ Theme:  Dark (optimized for long sessions)
 
 ## Features
 
-### Live Data
+### Verses sourced like the SBL project
 
-VERSIO fetches **today's Sabbath School lesson** directly from SDARM. No manual updates. When you open Photoshop, you see today's passages automatically.
+Today's lesson gives the Bible citations (book, chapter, verse); the full Bible text files supply the exact quoted wording in each language — the same pipeline used by the SDARM SBL and MANNA projects, rather than any shortened or paraphrased text.
 
 **Data sources:**
-- Lessons: `app.sdarm.org/sbl/data/`
-- Bible text: KJV (English), Synodal (Russian)
+- Lesson citations: `app.sdarm.org/sbl/data/`
+- Full Bible text: `app.sdarm.org/bible/data/` — KJV (English), Synodal (Russian)
 
 ### Dual Language
 
@@ -165,7 +163,7 @@ VERSIO automatically extracts meaningful words from each passage. Click to study
 - A real dictionary example
 - How many more words remain in this verse
 
-No setup. No word lists. Just the words from today's Scripture.
+Examples come from the Free Dictionary API first; if a word has no example there, VERSIO checks Wiktionary before giving up. No setup. No word lists. Just the words from today's Scripture.
 
 ### Works Offline
 
@@ -179,87 +177,61 @@ Optimized for long study sessions:
 - Dark theme reduces eye strain
 - Typography sized for readability
 - No distractions—just Scripture
+- Text automatically shrinks to fit even the longest Bible verse, so the panel never scrolls
 
 Matches Photoshop's native design language.
-
-### Zero Configuration
-
-Drop the panel in your CEP extensions folder. Photoshop finds it. No config files. No restart needed (just close/reopen the panel). It works.
 
 ---
 
 ## Technical Details
 
-| Property | Value |
-|----------|-------|
-| **Type** | CEP Panel (CEP 10.0) |
-| **Language** | HTML5 + Vanilla JavaScript |
-| **Size** | ~50 KB |
-| **Photoshop** | 2020 (v21.0) through 2025 (v26.x), confirmed |
-| **OS** | macOS 10.13+, Windows 7+ |
-| **Internet** | Required on first load; works offline after |
-
-Photoshop 2026 removed classic CEP extension loading for third-party panels — see [Troubleshooting](#troubleshooting).
+| Property | UXP edition | CEP edition |
+|---|---|---|
+| **Photoshop** | 2024–2026+ | 2020–2025 |
+| **Manifest** | `manifest.json` (manifestVersion 5) | `CSXS/manifest.xml` (CEP 10.0) |
+| **Language** | HTML5 + Vanilla JavaScript | HTML5 + Vanilla JavaScript |
+| **Size** | 300×550, fixed | 300×550, fixed |
+| **Menu location** | Plugins → VERSIO | Window → VERSIO |
+| **Internet** | Required on first load; works offline after | Same |
 
 ### Architecture
 
 ```
-VERSIO/
-  ├── CSXS/
-  │   └── manifest.xml       # Panel registration
-  ├── index.html             # UI + JavaScript
-  ├── hostscript.jsx         # Photoshop communication
-  └── README.md              # Instructions
+VERSIO-UXP/                  VERSIO/ (CEP)
+  ├── manifest.json            ├── CSXS/manifest.xml
+  ├── index.html                ├── index.html (UI + JS)
+  ├── styles.css                └── hostscript.jsx
+  ├── index.js
+  └── icons/
 ```
-
-**Manifest** (CEP 10.0):
-- Extension ID: `versio`
-- Version: 5.1.0
-- Size: 300×550 pixels (fixed — not resizable, by design)
-- Target: Photoshop 21.0–99.9 (2020–2025)
 
 ---
 
 ## Troubleshooting
 
-### Photoshop 2026 doesn't show the panel at all
+### UXP: plugin doesn't appear under Plugins menu
 
-VERSIO is a **CEP panel** — the extension format Adobe has been retiring in favor of **UXP**. In our own testing, Photoshop 2025 (v26.8) loads CEP panels normally and logs their startup in `~/Library/Logs/CSXS/`. Photoshop 2026 (v27.5) produced **no CEP log activity whatsoever** for any third-party panel, even though the manifest and installation were correct — strongly suggesting Photoshop 2026 no longer scans the classic CEP extensions folder for third-party panels.
+1. Confirm the folder is named exactly `com.maestro.versio` and sits directly inside `.../UXP/Plugins/External/`
+2. Confirm `manifest.json` is valid JSON (any JSON validator will do)
+3. Restart Photoshop completely
+4. Check the UXP log: `~/Library/Logs/Adobe/Adobe Photoshop 2026/UXPLogs_*.log` (Mac) — search for `com.maestro.versio`. Its presence there, without an accompanying error, means Photoshop found and registered the plugin.
 
-**What this means:**
-- **Photoshop 2020–2025**: VERSIO works as documented below.
-- **Photoshop 2026**: CEP panels may not appear in the Window menu at all, regardless of manifest settings. This is a platform limitation, not a bug in the panel.
+### CEP: panel doesn't appear in Window menu
 
-**Workaround:** Run VERSIO in Photoshop 2025 or earlier until a UXP version is available. A UXP port is on the [roadmap](#roadmap).
-
-If you're on 2026 and want to help test this further, open an [issue](https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/issues) with your exact Photoshop build number.
-
-### Panel doesn't appear in Window menu (2020–2025)
-
-**Solution:**
-1. Verify VERSIO folder is in correct location:
-   - **Mac**: `~/Library/Application Support/Adobe/CEP/extensions/VERSIO`
-   - **Windows**: `C:\Users\<You>\AppData\Roaming\Adobe\CEP\extensions\VERSIO`
+1. Verify the VERSIO folder is in the correct CEP extensions location (see [Install](#install))
 2. Restart Photoshop completely
-3. Check Adobe logs: `~/Library/Logs/CSXS/` (Mac) — look for a `VERSIO` log file after launch. No file means Photoshop never attempted to load it.
+3. Check Adobe logs: `~/Library/Logs/CSXS/` (Mac) — look for a `VERSIO` log file after launch. No file means Photoshop never attempted to load it — likely because this Photoshop version has dropped CEP support for third-party panels; use the UXP edition instead.
 
 ### "No verses found" message
 
-**Solution:**
 - Check internet connection
 - SDARM API may be temporarily down—try again in a moment
 - Panel falls back to John 3:16 automatically
 
 ### Words don't show examples
 
-**Solution:**
-- Dictionary API (dictionaryapi.dev) needs internet connection
-- Some rare words may not be in the public dictionary
-- Try a different word from the passage
-
-### CEP warnings in console
-
-**Info:** CEP panels show warnings by default. This is normal. VERSIO works despite these messages.
+- Both dictionary sources need an internet connection
+- A handful of very rare words may have no example in either source
 
 ---
 
@@ -267,7 +239,6 @@ If you're on 2026 and want to help test this further, open an [issue](https://gi
 
 Planned features:
 
-- **UXP port (priority)** — required for Photoshop 2026 and later
 - Offline lesson caching (pre-download quarters)
 - Custom date selection (not just today)
 - Memory quiz mode
@@ -280,13 +251,13 @@ Planned features:
 
 ## Credits
 
-**VERSIO v5.1.0**  
+**VERSIO**  
 © 2026 Sergio (Maestro)
 
 **Built with:**
-- SDARM Bible Lesson API
-- Dictionary API (dictionaryapi.dev)
-- Adobe CEP Framework
+- SDARM Bible Lesson and Bible text API
+- Free Dictionary API (dictionaryapi.dev) and Wiktionary
+- Adobe UXP and CEP frameworks
 
 **Author:** Sergio (Maestro)  
 **GitHub:** [@TheMaestr-o](https://github.com/TheMaestr-o)  
@@ -307,6 +278,6 @@ MIT License – Free to use, modify, and distribute.
 
 Study Scripture daily. Stay focused. VERSIO keeps you there.
 
-[Install VERSIO](https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/releases/download/v5.1.0/VERSIO.zip) • [Report Issue](https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/issues) • [Contact](mailto:gssdarm@gmail.com)
+[Report Issue](https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/issues) • [Contact](mailto:gssdarm@gmail.com)
 
 </div>
