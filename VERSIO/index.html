@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob: https://api.dictionaryapi.dev https://app.sdarm.org;">
+    <title>VERSIO</title>
+    <style>
+        :root {
+            --bg: #1a1a1a;
+            --text: #f5f5f7;
+            --dim: #86868b;
+            --accent: #0A84FF;
+            --div: #333;
+            --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            font-family: var(--font); background: var(--bg); color: var(--text);
+            margin: 0; padding: 20px; height: 100vh; width: 100vw;
+            display: flex; flex-direction: column; overflow: hidden;
+            user-select: none; box-sizing: border-box;
+        }
+
+        #loader {
+            position: absolute; top:0; left:0; width:100%; height:100%;
+            background: var(--bg); display:flex; justify-content:center; align-items:center;
+            z-index: 100; flex-direction: column;
+            color: #666; font-size: 10px; letter-spacing: 2px; font-weight: 600;
+        }
+
+        #verse-section { text-align: center; margin-bottom: 18px; cursor: pointer; }
+        #v-en { font-size: 13px; line-height: 1.6; color: #d1d1d6; }
+        .hl { color: #ffffff; font-weight: 700; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
+        #v-ref { font-size: 9px; color: var(--dim); text-transform: uppercase; letter-spacing: 1px; margin-top: 8px; }
+
+        #word-section {
+            text-align: center; margin-bottom: 16px; cursor: pointer;
+            padding: 13px 15px; background: rgba(255,255,255,0.03); border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: background 0.2s;
+        }
+        #word-section:hover { background: rgba(255,255,255,0.06); }
+
+        #w-en { font-size: 24px; font-weight: 600; color: #e8c97a; margin-bottom: 4px; text-transform: capitalize; letter-spacing: 0.5px; }
+        #word-counter { font-size: 9px; color: #555; text-align: center; margin-top: 6px; letter-spacing: 1px; }
+
+        #ex-box { border-top: 1px solid var(--div); padding: 13px 0; margin-bottom: 0; }
+        .lbl { font-size: 8px; color: var(--dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; text-align: center; }
+        #ex-en { font-size: 12px; color: #d0d0d0; line-height: 1.5; text-align: center; min-height: 18px; }
+
+        #synodal-box { border-top: 1px solid var(--div); padding: 12px 0 0; margin-top: auto; }
+        #synodal-lbl { font-size: 8px; color: var(--dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; text-align: center; }
+        #v-ru { font-size: 11px; color: #888; text-align: center; line-height: 1.5; min-height: 14px; }
+        #v-ru-ref { font-size: 9px; color: #555; text-align: center; letter-spacing: 1px; text-transform: uppercase; margin-top: 5px; }
+
+        #error-msg { font-size: 10px; color: #ff6b6b; text-align: center; display: none; margin-top: 5px; }
+    </style>
+</head>
+
+<body>
+    <div class="author" style="position:fixed;top:8px;left:0;width:100%;text-align:center;font-size:9px;font-weight:300;letter-spacing:0.08em;color:#484848;pointer-events:none;">Designed by Maestro</div>
+    <div id="loader">LOADING VERSIO...</div>
+
+    <div id="verse-section" title="Кликни для следующего стиха">
+        <div id="v-en"></div>
+        <div id="v-ref"></div>
+    </div>
+
+    <div id="word-section" title="Кликни для следующего слова">
+        <div id="w-en"></div>
+        <div id="word-counter"></div>
+    </div>
+
+    <div id="ex-box">
+        <div class="lbl">Example</div>
+        <div id="ex-en">...</div>
+    </div>
+
+    <div id="synodal-box">
+        <div id="synodal-lbl">Перевод стиха</div>
+        <div id="v-ru">...</div>
+        <div id="v-ru-ref"></div>
+    </div>
+
+    <div id="error-msg"></div>
+
+    <script>
+        const state = { en: "", ru: "", ref: "", words: [], idx: 0, vocabCache: {} };
+        let loading = false;
+        let versePool = [];
+        let verseIdx = 0;
+
+        const STOP_WORDS = new Set([
+            "the","and","of","to","in","that","is","he","for","it","as","was","with","be","on","at","by","not","this","but","from","they","his","her","she","him","my","me","you","your","are","have","had","do","does","did","will","shall","can","could","would","should","an","or","so","if","all","into","upon","unto","their","them","who","what","which","then","when","were","been","hath","thou","thee","thy","said","also","even","now","yet","let","its","has","more","those","such","over","only","these","here","out","about","just","been","should","could","would","have","there","these","should","than"
+        ]);
+
+        const FALLBACK = [
+            { text: "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.", ref: "John 3:16", ru: "Ибо так возлюбил Бог мир, что отдал Сына Своего единородного, дабы всякий верующий в Него, не погибал, но имел жизнь вечную." }
+        ];
+
+        function ymd(d = new Date()) {
+            const y = d.getFullYear();
+            const m = ("0" + (d.getMonth() + 1)).slice(-2);
+            const day = ("0" + d.getDate()).slice(-2);
+            return y + m + day;
+        }
+
+        function quarterOf(d) { return Math.floor(d.getMonth() / 3) + 1; }
+
+        function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+        function stripHtml(s) { return (s || "").replace(/<[^>]*>/g, "").trim(); }
+
+        async function fetchLessons(lang) {
+            const today = new Date();
+            const y = today.getFullYear();
+            const q = quarterOf(today);
+            const url = `https://app.sdarm.org/sbl/data/${lang}/${lang}-${y}-${q}.json`;
+
+            try {
+                const r = await fetch(url);
+                if (!r.ok) return null;
+                const data = await r.json();
+                const target = ymd(today);
+
+                if (!data?.lessons) return null;
+
+                for (const lesson of data.lessons) {
+                    if (lesson.date === target) return lesson;
+                }
+                return null;
+            } catch(e) {
+                console.error(`Failed to fetch ${lang} lesson:`, e);
+                return null;
+            }
+        }
+
+        function extractVersesFromLesson(enLesson, ruLesson) {
+            const verses = [];
+
+            if (!enLesson || !enLesson.dailyLessons) return verses;
+
+            for (const day of enLesson.dailyLessons) {
+                if (!day.steps) continue;
+                for (const step of day.steps) {
+                    if (!step.verses) continue;
+                    for (const v of step.verses) {
+                        if (!v.text) continue;
+                        verses.push({
+                            text: stripHtml(v.text),
+                            ref: v.ref || "–",
+                            ru: ""
+                        });
+                    }
+                }
+            }
+
+            if (ruLesson && ruLesson.dailyLessons) {
+                let ruIdx = 0;
+                for (const day of ruLesson.dailyLessons) {
+                    if (!day.steps) continue;
+                    for (const step of day.steps) {
+                        if (!step.verses) continue;
+                        for (const v of step.verses) {
+                            if (v.text && ruIdx < verses.length) {
+                                verses[ruIdx].ru = stripHtml(v.text);
+                                ruIdx++;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return verses;
+        }
+
+        function extractWords(text) {
+            if (!text) return [];
+            const words = text.replace(/[^\w\s]/gi, '').split(/\s+/);
+            const unique = [...new Set(
+                words
+                    .map(w => w.toLowerCase())
+                    .filter(w => w.length > 3 && !STOP_WORDS.has(w))
+            )];
+            return unique.length > 0 ? unique : ["verse"];
+        }
+
+        async function loadVerseDefs() {
+            if (!state.en) return;
+            state.words = extractWords(state.en);
+            state.idx = 0;
+            update(state.words[0]);
+        }
+
+        async function getWordExample(word) {
+            if (state.vocabCache[word]) return state.vocabCache[word];
+
+            try {
+                const r = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+                if (!r.ok) throw new Error("Not found");
+                const data = await r.json();
+
+                if (data?.[0]?.meanings) {
+                    for (const m of data[0].meanings) {
+                        if (m.definitions?.[0]?.example) {
+                            state.vocabCache[word] = m.definitions[0].example;
+                            return state.vocabCache[word];
+                        }
+                    }
+                }
+            } catch(e) {}
+
+            state.vocabCache[word] = "(example not found)";
+            return state.vocabCache[word];
+        }
+
+        async function update(w) {
+            if (!w) return;
+            const regex = new RegExp(`\\b${escapeRegex(w)}\\b`, 'gi');
+            document.getElementById('v-en').innerHTML = state.en.replace(regex, '<span class="hl">$&</span>');
+            document.getElementById('w-en').innerText = w;
+            updateCounter();
+
+            const ex = await getWordExample(w);
+            document.getElementById('ex-en').innerText = ex;
+        }
+
+        function updateCounter() {
+            const el = document.getElementById('word-counter');
+            if (el) {
+                el.innerText = state.words.length > 0 ? `${state.idx + 1} / ${state.words.length}` : '';
+            }
+        }
+
+        function loadVerse() {
+            if (versePool.length === 0) {
+                document.getElementById('error-msg').innerText = 'No verses found.';
+                document.getElementById('error-msg').style.display = 'block';
+                return;
+            }
+
+            const v = versePool[verseIdx % versePool.length];
+            state.en = v.text || '';
+            state.ru = v.ru || '';
+            state.ref = v.ref || '–';
+
+            document.getElementById('v-ref').innerText = state.ref;
+            document.getElementById('v-ru').innerText = state.ru || '–';
+            document.getElementById('v-ru-ref').innerText = state.ref;
+            document.getElementById('error-msg').style.display = 'none';
+
+            loadVerseDefs();
+        }
+
+        async function init() {
+            if (loading) return;
+            loading = true;
+
+            document.getElementById('loader').style.display = 'flex';
+            document.getElementById('error-msg').style.display = 'none';
+
+            try {
+                const [enLesson, ruLesson] = await Promise.all([
+                    fetchLessons('en'),
+                    fetchLessons('ru')
+                ]);
+
+                versePool = extractVersesFromLesson(enLesson, ruLesson);
+
+                if (versePool.length === 0) {
+                    versePool = FALLBACK;
+                }
+
+                verseIdx = 0;
+                document.getElementById('loader').style.display = 'none';
+                loading = false;
+                loadVerse();
+
+            } catch(e) {
+                console.error('Init error:', e);
+                versePool = FALLBACK;
+                verseIdx = 0;
+                document.getElementById('loader').style.display = 'none';
+                loading = false;
+                loadVerse();
+            }
+        }
+
+        document.getElementById('verse-section').onclick = () => {
+            verseIdx++;
+            loadVerse();
+        };
+
+        document.getElementById('word-section').onclick = () => {
+            if (state.words.length > 0) {
+                state.idx = (state.idx + 1) % state.words.length;
+                update(state.words[state.idx]);
+            }
+        };
+
+        window.onload = init;
+    </script>
+</body>
+</html>
