@@ -11,6 +11,8 @@ Daily Scripture lessons while you work.
 
 [What is VERSIO?](#what-is-versio) • [Install](#install) • [How to Use](#how-to-use) • [Features](#features)
 
+`#photoshop` `#photoshop-plugin` `#photoshop-panel` `#photoshop-extension` `#photoshop-scripts` `#adobe-photoshop` `#uxp` `#uxp-plugin` `#cep-extension` `#bible` `#bible-study` `#bible-verses` `#scripture` `#sabbath-school` `#sdarm` `#seventh-day-adventist` `#christian` `#daily-devotional` `#vocabulary-builder` `#language-learning`
+
 ---
 
 ### The Problem
@@ -52,7 +54,7 @@ Photoshop replaced its old CEP extension system with UXP starting around 2024; b
 
 <div align="center">
 
-![VERSIO Panel Gallery](https://raw.githubusercontent.com/TheMaestr-o/VERSIO-Photoshop-Panel/main/screenshots/gallery-full.png)
+![VERSIO Panel Gallery](https://raw.githubusercontent.com/TheMaestr-o/VERSIO-Photoshop-Panel/main/screenshots/gallery-full.png?v=2)
 
 **① Initial Load** · **② Word Study** · **③ Navigate** · **④ Dual Language**
 
