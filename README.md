@@ -6,7 +6,7 @@
 **English text. Russian translation. Vocabulary practice.**  
 Daily Scripture lessons while you work.
 
-[![Download](https://img.shields.io/badge/Download-v5.0.0-blue.svg)](https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/releases/download/v5.0.0/VERSIO.zip)
+[![Download](https://img.shields.io/badge/Download-v5.1.0-blue.svg)](https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/releases/download/v5.1.0/VERSIO.zip)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 ![Photoshop](https://img.shields.io/badge/Photoshop-2020%E2%80%942026-blue.svg)
 
@@ -30,11 +30,11 @@ You spend hours in Photoshop. You want to study Scripture daily. But switching b
 
 A **CEP panel** for Adobe Photoshop that displays:
 
-- ✨ **Today's Bible passages** from the Sabbath School lesson
-- ✨ **English text** (King James Version) 
-- ✨ **Russian translation** (Synodal Version)
-- ✨ **Vocabulary study** — click words to learn definitions
-- ✨ **Real dictionary examples** for each word
+- Today's Bible passages from the Sabbath School lesson
+- English text (King James Version)
+- Russian translation (Synodal Version)
+- Vocabulary study — click words to learn definitions
+- Real dictionary examples for each word
 
 Live data from **SDARM**. No manual updates. No configuration. Install once, it works.
 
@@ -64,7 +64,7 @@ English + Russian side by side. Click to learn. Dark theme optimized for focus.
 
 ```bash
 # Download the panel
-curl -L https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/releases/download/v5.0.0/VERSIO.zip -o ~/Downloads/VERSIO.zip
+curl -L https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/releases/download/v5.1.0/VERSIO.zip -o ~/Downloads/VERSIO.zip
 
 # Extract
 unzip ~/Downloads/VERSIO.zip -d ~/Library/Application\ Support/Adobe/CEP/extensions/
@@ -77,7 +77,7 @@ Then: **Window → VERSIO**
 ### For Windows
 
 ```bash
-# Download: https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/releases/download/v5.0.0/VERSIO.zip
+# Download: https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/releases/download/v5.1.0/VERSIO.zip
 # Extract to: C:\Users\<Your Username>\AppData\Roaming\Adobe\CEP\extensions\
 # Restart Photoshop
 ```
@@ -86,7 +86,7 @@ Then: **Window → VERSIO**
 
 ### Manual Install (Any OS)
 
-1. [Download VERSIO.zip](https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/releases/download/v5.0.0/VERSIO.zip)
+1. [Download VERSIO.zip](https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/releases/download/v5.1.0/VERSIO.zip)
 2. Copy the `VERSIO` folder to your CEP extensions directory:
    - **Mac**: `~/Library/Application Support/Adobe/CEP/extensions/`
    - **Windows**: `C:\Users\<Your Username>\AppData\Roaming\Adobe\CEP\extensions\`
@@ -105,17 +105,15 @@ After install, VERSIO appears in your **Window** menu. Click **Window → VERSIO
 
 | Action | What Happens |
 |--------|---|
-| **Click on the verse** | Loads the next Bible passage |
-| **Click on the word** | Shows the next vocabulary term |
-| **Read the example** | Understand the word in context |
-| **Read Russian translation** | Compare both versions |
+| Click on the verse | Loads the next Bible passage |
+| Click on the word | Shows the next vocabulary term |
+| Read the example | Understand the word in context |
+| Read Russian translation | Compare both versions |
 
 ### Layout
 
 ```
 ┌─────────────────────────────────┐
-│      Designed by Maestro        │
-├─────────────────────────────────┤
 │                                 │
 │  For God so loved the world     │
 │  that he gave his one and       │
@@ -144,7 +142,7 @@ Theme:  Dark (optimized for long sessions)
 
 ## Features
 
-### 🌐 Live Data
+### Live Data
 
 VERSIO fetches **today's Sabbath School lesson** directly from SDARM. No manual updates. When you open Photoshop, you see today's passages automatically.
 
@@ -152,7 +150,7 @@ VERSIO fetches **today's Sabbath School lesson** directly from SDARM. No manual 
 - Lessons: `app.sdarm.org/sbl/data/`
 - Bible text: KJV (English), Synodal (Russian)
 
-### 📚 Dual Language
+### Dual Language
 
 Study Scripture in **two languages side by side**:
 - **English**: King James Version (formal, poetic)
@@ -160,7 +158,7 @@ Study Scripture in **two languages side by side**:
 
 Understand the nuances. Compare translations. Learn faster.
 
-### 🎓 Vocabulary Builder
+### Vocabulary Builder
 
 VERSIO automatically extracts meaningful words from each passage. Click to study:
 - The word itself
@@ -169,13 +167,13 @@ VERSIO automatically extracts meaningful words from each passage. Click to study
 
 No setup. No word lists. Just the words from today's Scripture.
 
-### ⚡ Works Offline
+### Works Offline
 
-No internet on launch day? VERSIO has you covered.
+No internet on launch day? VERSIO works anyway.
 
-Fallback passage included (John 3:16). Works even if SDARM API is unreachable. When connection returns, loads live data.
+Fallback passage included (John 3:16). Works even if the SDARM API is down. When connection returns, it loads live data.
 
-### 🎨 Minimal, Dark Design
+### Minimal, Dark Design
 
 Optimized for long study sessions:
 - Dark theme reduces eye strain
@@ -184,7 +182,7 @@ Optimized for long study sessions:
 
 Matches Photoshop's native design language.
 
-### 🚀 Zero Configuration
+### Zero Configuration
 
 Drop the panel in your CEP extensions folder. Photoshop finds it. No config files. No restart needed (just close/reopen the panel). It works.
 
@@ -253,21 +251,21 @@ VERSIO/
 
 ## Roadmap
 
-**Planned features:**
+Planned features:
 
-- [ ] Offline lesson caching (pre-download quarters)
-- [ ] Custom date selection (not just today)
-- [ ] Memory quiz mode
-- [ ] Search within verse text
-- [ ] Custom word list export to CSV
-- [ ] German (DE) language support
-- [ ] iPad companion app
+- Offline lesson caching (pre-download quarters)
+- Custom date selection (not just today)
+- Memory quiz mode
+- Search within verse text
+- Custom word list export to CSV
+- German (DE) language support
+- iPad companion app
 
 ---
 
 ## Credits
 
-**VERSIO v5.0.0**  
+**VERSIO v5.1.0**  
 © 2026 Sergio (Maestro)
 
 **Built with:**
@@ -286,22 +284,14 @@ VERSIO/
 
 MIT License – Free to use, modify, and distribute.
 
-```
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the 
-"Software"), to deal in the Software without restriction...
-```
-
 [Full license text](LICENSE)
 
 ---
 
 <div align="center">
 
-**Study Scripture daily.**  
-**Stay focused.**  
-**VERSIO keeps you there.**
+Study Scripture daily. Stay focused. VERSIO keeps you there.
 
-[Install VERSIO](https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/releases/download/v5.0.0/VERSIO.zip) • [Report Issue](https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/issues) • [Contact](mailto:gssdarm@gmail.com)
+[Install VERSIO](https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/releases/download/v5.1.0/VERSIO.zip) • [Report Issue](https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/issues) • [Contact](mailto:gssdarm@gmail.com)
 
 </div>
