@@ -42,24 +42,17 @@ Live data from **SDARM**. No manual updates. No configuration. Install once, it 
 
 ## Screenshots
 
-<table>
-<tr>
-  <td align="center">
-    <img src="screenshots/screen-1-load.jpg" width="280" alt="Initial Load"/><br>
-    <sub><b>Daily lesson loads automatically</b></sub>
-  </td>
-  <td align="center">
-    <img src="screenshots/screen-2-vocab.jpg" width="280" alt="Vocabulary"/><br>
-    <sub><b>Click word → see definition</b></sub>
-  </td>
-  <td align="center">
-    <img src="screenshots/screen-3-next.jpg" width="280" alt="Navigation"/><br>
-    <sub><b>Click verse → next passage</b></sub>
-  </td>
-</tr>
-</table>
+<div align="center">
 
-[View full gallery →](screenshots/index.html)
+![VERSIO Panel Gallery](https://raw.githubusercontent.com/TheMaestr-o/VERSIO-Photoshop-Panel/main/screenshots/gallery-full.png)
+
+**① Initial Load** · **② Word Study** · **③ Navigate** · **④ Dual Language**
+
+English + Russian side by side. Click to learn. Dark theme optimized for focus.
+
+[View interactive HTML gallery →](screenshots/index.html)
+
+</div>
 
 ---
 

@@ -10,3 +10,5 @@ build/
 .env
 .env.local
 *.log
+package-lock.json
+generate-screenshots.js
