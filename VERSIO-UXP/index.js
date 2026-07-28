@@ -148,7 +148,7 @@ async function getVerseText(sOsis, lang) {
 }
 
 async function buildVersePool() {
-    const [en, ru] = await Promise.all([findTodayDay('en'), findTodayDay('ru')]);
+    const en = await findTodayDay('en');
     if (!en) return [];
 
     const refs = collectRefs(en.lesson, en.day);
