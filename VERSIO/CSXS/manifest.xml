@@ -5,7 +5,7 @@
     </ExtensionList>
     <ExecutionEnvironment>
         <HostList>
-            <Host Name="PHXS" Version="[21.0,999.0]" />
+            <Host Name="PHXS" Version="[21.0,99.9]" />
         </HostList>
         <LocaleList><Locale Code="All" /></LocaleList>
         <RequiredRuntimeList>
@@ -25,8 +25,8 @@
                     <Menu>VERSIO</Menu>
                     <Geometry>
                         <Size><Width>300</Width><Height>550</Height></Size>
-                        <MaxSize><Width>10000</Width><Height>10000</Height></MaxSize>
-                        <MinSize><Width>200</Width><Height>200</Height></MinSize>
+                        <MaxSize><Width>300</Width><Height>550</Height></MaxSize>
+                        <MinSize><Width>300</Width><Height>550</Height></MinSize>
                     </Geometry>
                 </UI>
             </DispatchInfo>

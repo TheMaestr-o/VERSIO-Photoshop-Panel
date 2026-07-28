@@ -12,6 +12,11 @@
             --accent: #0A84FF;
             --div: #333;
             --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --scale: 1;
+        }
+
+        html, body {
+            overflow: hidden;
         }
 
         body {
@@ -21,6 +26,14 @@
             user-select: none; box-sizing: border-box;
         }
 
+        #stage {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            overflow: hidden;
+        }
+
         #loader {
             position: absolute; top:0; left:0; width:100%; height:100%;
             background: var(--bg); display:flex; justify-content:center; align-items:center;
@@ -28,30 +41,29 @@
             color: #666; font-size: 10px; letter-spacing: 2px; font-weight: 600;
         }
 
-        #verse-section { text-align: center; margin-bottom: 18px; cursor: pointer; }
-        #v-en { font-size: 13px; line-height: 1.6; color: #d1d1d6; }
+        #verse-section { text-align: center; margin-bottom: calc(18px * var(--scale)); cursor: pointer; }
+        #v-en { font-size: calc(13px * var(--scale)); line-height: 1.6; color: #d1d1d6; }
         .hl { color: #ffffff; font-weight: 700; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
-        #v-ref { font-size: 9px; color: var(--dim); text-transform: uppercase; letter-spacing: 1px; margin-top: 8px; }
+        #v-ref { font-size: calc(9px * var(--scale)); color: var(--dim); text-transform: uppercase; letter-spacing: 1px; margin-top: calc(8px * var(--scale)); }
 
         #word-section {
-            text-align: center; margin-bottom: 16px; cursor: pointer;
-            padding: 13px 15px; background: rgba(255,255,255,0.03); border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.05);
+            text-align: center; margin-bottom: calc(16px * var(--scale)); cursor: pointer;
+            padding: calc(13px * var(--scale)) 15px; background: rgba(255,255,255,0.03); border-radius: 8px;
             transition: background 0.2s;
         }
         #word-section:hover { background: rgba(255,255,255,0.06); }
 
-        #w-en { font-size: 24px; font-weight: 600; color: #e8c97a; margin-bottom: 4px; text-transform: capitalize; letter-spacing: 0.5px; }
-        #word-counter { font-size: 9px; color: #555; text-align: center; margin-top: 6px; letter-spacing: 1px; }
+        #w-en { font-size: calc(24px * var(--scale)); font-weight: 600; color: #e8c97a; margin-bottom: 4px; text-transform: capitalize; letter-spacing: 0.5px; }
+        #word-counter { font-size: calc(9px * var(--scale)); color: #555; text-align: center; margin-top: 6px; letter-spacing: 1px; }
 
-        #ex-box { border-top: 1px solid var(--div); padding: 13px 0; margin-bottom: 0; }
-        .lbl { font-size: 8px; color: var(--dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; text-align: center; }
-        #ex-en { font-size: 12px; color: #d0d0d0; line-height: 1.5; text-align: center; min-height: 18px; }
+        #ex-box { border-top: 1px solid var(--div); padding: calc(13px * var(--scale)) 0; margin-bottom: 0; }
+        .lbl { font-size: calc(8px * var(--scale)); color: var(--dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; text-align: center; }
+        #ex-en { font-size: calc(12px * var(--scale)); color: #d0d0d0; line-height: 1.5; text-align: center; min-height: 18px; }
 
-        #synodal-box { border-top: 1px solid var(--div); padding: 12px 0 0; margin-top: auto; }
-        #synodal-lbl { font-size: 8px; color: var(--dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; text-align: center; }
-        #v-ru { font-size: 11px; color: #888; text-align: center; line-height: 1.5; min-height: 14px; }
-        #v-ru-ref { font-size: 9px; color: #555; text-align: center; letter-spacing: 1px; text-transform: uppercase; margin-top: 5px; }
+        #synodal-box { border-top: 1px solid var(--div); padding: calc(12px * var(--scale)) 0 0; margin-top: auto; }
+        #synodal-lbl { font-size: calc(8px * var(--scale)); color: var(--dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; text-align: center; }
+        #v-ru { font-size: calc(11px * var(--scale)); color: #888; text-align: center; line-height: 1.5; min-height: 14px; }
+        #v-ru-ref { font-size: calc(9px * var(--scale)); color: #555; text-align: center; letter-spacing: 1px; text-transform: uppercase; margin-top: 5px; }
 
         #error-msg { font-size: 10px; color: #ff6b6b; text-align: center; display: none; margin-top: 5px; }
     </style>
@@ -60,25 +72,27 @@
 <body>
     <div id="loader">LOADING VERSIO...</div>
 
-    <div id="verse-section" title="Кликни для следующего стиха">
-        <div id="v-en"></div>
-        <div id="v-ref"></div>
-    </div>
+    <div id="stage">
+        <div id="verse-section" title="Кликни для следующего стиха">
+            <div id="v-en"></div>
+            <div id="v-ref"></div>
+        </div>
 
-    <div id="word-section" title="Кликни для следующего слова">
-        <div id="w-en"></div>
-        <div id="word-counter"></div>
-    </div>
+        <div id="word-section" title="Кликни для следующего слова">
+            <div id="w-en"></div>
+            <div id="word-counter"></div>
+        </div>
 
-    <div id="ex-box">
-        <div class="lbl">Example</div>
-        <div id="ex-en">...</div>
-    </div>
+        <div id="ex-box">
+            <div class="lbl">Example</div>
+            <div id="ex-en">...</div>
+        </div>
 
-    <div id="synodal-box">
-        <div id="synodal-lbl">Перевод стиха</div>
-        <div id="v-ru">...</div>
-        <div id="v-ru-ref"></div>
+        <div id="synodal-box">
+            <div id="synodal-lbl">Перевод стиха</div>
+            <div id="v-ru">...</div>
+            <div id="v-ru-ref"></div>
+        </div>
     </div>
 
     <div id="error-msg"></div>
@@ -213,15 +227,26 @@
             return state.vocabCache[word];
         }
 
+        function fitContent() {
+            const stage = document.getElementById('stage');
+            const steps = [1, 0.93, 0.87, 0.81, 0.75, 0.7, 0.65, 0.6, 0.55];
+            for (const s of steps) {
+                document.documentElement.style.setProperty('--scale', s);
+                if (stage.scrollHeight <= stage.clientHeight + 1) return;
+            }
+        }
+
         async function update(w) {
             if (!w) return;
             const regex = new RegExp(`\\b${escapeRegex(w)}\\b`, 'gi');
             document.getElementById('v-en').innerHTML = state.en.replace(regex, '<span class="hl">$&</span>');
             document.getElementById('w-en').innerText = w;
             updateCounter();
+            fitContent();
 
             const ex = await getWordExample(w);
             document.getElementById('ex-en').innerText = ex;
+            fitContent();
         }
 
         function updateCounter() {
