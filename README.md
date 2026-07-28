@@ -259,10 +259,11 @@ Planned features:
 - Free Dictionary API (dictionaryapi.dev) and Wiktionary
 - Adobe UXP and CEP frameworks
 
-**Author:** Sergio (Maestro)  
-**GitHub:** [@TheMaestr-o](https://github.com/TheMaestr-o)  
-**Email:** gssdarm@gmail.com  
-**Support:** [Issues](https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/issues)
+**Author:** Sergio (Maestro)
+
+[![GitHub](https://img.shields.io/badge/GitHub-%40TheMaestr--o-181717?logo=github&logoColor=white)](https://github.com/TheMaestr-o)
+[![Email](https://img.shields.io/badge/Email-gssdarm%40gmail.com-D14836?logo=gmail&logoColor=white)](mailto:gssdarm@gmail.com)
+[![Issues](https://img.shields.io/badge/Support-Open%20an%20Issue-blue?logo=github&logoColor=white)](https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/issues)
 
 ---
 
@@ -278,6 +279,7 @@ MIT License – Free to use, modify, and distribute.
 
 Study Scripture daily. Stay focused. VERSIO keeps you there.
 
-[Report Issue](https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/issues) • [Contact](mailto:gssdarm@gmail.com)
+[![Report Issue](https://img.shields.io/badge/Report-Issue-red?logo=github&logoColor=white)](https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/issues)
+[![Contact](https://img.shields.io/badge/Contact-Email-D14836?logo=gmail&logoColor=white)](mailto:gssdarm@gmail.com)
 
 </div>

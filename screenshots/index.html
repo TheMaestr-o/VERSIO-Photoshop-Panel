@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>VERSIO Panel - Photoshop CEP</title>
+    <title>VERSIO Panel - Photoshop</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -13,10 +13,7 @@
             min-height: 100vh;
         }
 
-        .gallery {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        .gallery { max-width: 1200px; margin: 0 auto; }
 
         h1 {
             text-align: center;
@@ -34,9 +31,7 @@
             margin-bottom: 60px;
         }
 
-        .screenshot-wrapper {
-            text-align: center;
-        }
+        .screenshot-wrapper { text-align: center; }
 
         .screenshot-label {
             color: #aaa;
@@ -54,16 +49,14 @@
             line-height: 1.6;
         }
 
-        /* VERSIO Panel */
+        /* VERSIO Panel — mirrors the real panel's styles.css/index.html exactly */
         .versio-panel {
             width: 300px;
             height: 550px;
             margin: 0 auto 20px;
             background: #1a1a1a;
             border: 1px solid #2a2a2a;
-            box-shadow:
-                0 20px 60px rgba(0,0,0,0.5),
-                inset 0 1px 0 rgba(255,255,255,0.05);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
             border-radius: 4px;
             overflow: hidden;
             display: flex;
@@ -71,163 +64,31 @@
             position: relative;
         }
 
-        .panel-header {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            text-align: center;
-            font-size: 9px;
-            font-weight: 300;
-            letter-spacing: 0.08em;
-            color: #484848;
-            padding-top: 8px;
-            z-index: 10;
-        }
-
         .panel-content {
             flex: 1;
-            padding: 40px 20px 20px;
-            overflow-y: auto;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            scrollbar-width: none;
             color: #f5f5f7;
         }
 
-        .panel-content::-webkit-scrollbar {
-            display: none;
-        }
+        #verse-section { text-align: center; margin-bottom: 18px; }
+        #v-en { font-size: 13px; line-height: 1.6; color: #d1d1d6; margin-bottom: 8px; }
+        .hl { color: #ffffff; font-weight: 700; }
+        #v-ref { font-size: 9px; color: #86868b; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Verse Section */
-        #verse-section {
-            text-align: center;
-            margin-bottom: 18px;
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 4px;
-            transition: background 0.2s;
-        }
+        #word-section { text-align: center; margin-bottom: 16px; padding: 13px 15px; }
+        #w-en { font-size: 24px; font-weight: 600; color: #e8c97a; margin-bottom: 4px; text-transform: capitalize; }
+        #word-counter { font-size: 9px; color: #555; margin-top: 6px; letter-spacing: 1px; }
 
-        #verse-section:hover {
-            background: rgba(255,255,255,0.02);
-        }
+        #ex-box { border-top: 1px solid #333; padding: 13px 0; }
+        .lbl { font-size: 8px; color: #86868b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; text-align: center; }
+        #ex-en { font-size: 12px; color: #d0d0d0; line-height: 1.5; text-align: center; min-height: 18px; }
 
-        #v-en {
-            font-size: 13px;
-            line-height: 1.6;
-            color: #d1d1d6;
-            margin-bottom: 8px;
-        }
+        #synodal-box { border-top: 1px solid #333; padding: 12px 0 0; margin-top: auto; }
+        #v-ru { font-size: 11px; color: #888; text-align: center; line-height: 1.5; }
+        #v-ru-ref { font-size: 9px; color: #555; text-align: center; letter-spacing: 1px; text-transform: uppercase; margin-top: 5px; }
 
-        .hl {
-            color: #ffffff;
-            font-weight: 700;
-            text-shadow: 0 0 10px rgba(255,255,255,0.2);
-            background: rgba(255,255,255,0.05);
-            padding: 0 2px;
-            border-radius: 2px;
-        }
-
-        #v-ref {
-            font-size: 9px;
-            color: #86868b;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Word Section */
-        #word-section {
-            text-align: center;
-            margin-bottom: 16px;
-            padding: 13px 15px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.05);
-            cursor: pointer;
-            transition: background 0.2s, border-color 0.2s;
-        }
-
-        #word-section:hover {
-            background: rgba(255,255,255,0.06);
-            border-color: rgba(255,255,255,0.08);
-        }
-
-        #w-en {
-            font-size: 24px;
-            font-weight: 600;
-            color: #e8c97a;
-            margin-bottom: 4px;
-            text-transform: capitalize;
-            letter-spacing: 0.5px;
-        }
-
-        #word-counter {
-            font-size: 9px;
-            color: #555;
-            text-align: center;
-            margin-top: 6px;
-            letter-spacing: 1px;
-        }
-
-        /* Example Box */
-        #ex-box {
-            border-top: 1px solid #333;
-            padding: 13px 0;
-            margin-bottom: 0;
-        }
-
-        .lbl {
-            font-size: 8px;
-            color: #86868b;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 6px;
-            text-align: center;
-        }
-
-        #ex-en {
-            font-size: 12px;
-            color: #d0d0d0;
-            line-height: 1.5;
-            text-align: center;
-            min-height: 18px;
-        }
-
-        /* Russian Translation Box */
-        #synodal-box {
-            border-top: 1px solid #333;
-            padding: 12px 0 0;
-            margin-top: auto;
-        }
-
-        #synodal-lbl {
-            font-size: 8px;
-            color: #86868b;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 6px;
-            text-align: center;
-        }
-
-        #v-ru {
-            font-size: 11px;
-            color: #888;
-            text-align: center;
-            line-height: 1.5;
-            min-height: 14px;
-        }
-
-        #v-ru-ref {
-            font-size: 9px;
-            color: #555;
-            text-align: center;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-top: 5px;
-        }
-
-        /* Info */
         .info {
             color: #888;
             font-size: 11px;
@@ -247,30 +108,28 @@
         <!-- Screenshot 1 -->
         <div class="screenshot-wrapper">
             <div class="screenshot-label">① Initial Load</div>
-            <div class="screenshot-desc">Today's lesson loads automatically from SDARM API</div>
+            <div class="screenshot-desc">Today's lesson loads automatically — citations resolved against the full Bible text</div>
 
             <div class="versio-panel">
-                <div class="panel-header">Designed by Maestro</div>
                 <div class="panel-content">
                     <div id="verse-section">
-                        <div id="v-en">For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.</div>
-                        <div id="v-ref">John 3:16</div>
+                        <div id="v-en">And ye shall seek me, and find me, when ye shall search for me with all your heart.</div>
+                        <div id="v-ref">Jeremiah 29:13</div>
                     </div>
 
                     <div id="word-section">
-                        <div id="w-en">perish</div>
-                        <div id="word-counter">1 / 8</div>
+                        <div id="w-en">search</div>
+                        <div id="word-counter">1 / 4</div>
                     </div>
 
                     <div id="ex-box">
                         <div class="lbl">Example</div>
-                        <div id="ex-en">The old civilization would perish without innovation.</div>
+                        <div id="ex-en">She began to search for clues in the old letters.</div>
                     </div>
 
                     <div id="synodal-box">
-                        <div id="synodal-lbl">Перевод стиха</div>
-                        <div id="v-ru">Ибо так возлюбил Бог мир, что отдал Сына Своего единородного, дабы всякий верующий в Него, не погибал, но имел жизнь вечную.</div>
-                        <div id="v-ru-ref">John 3:16</div>
+                        <div id="v-ru">и взыщете Меня и найдете, если взыщете Меня всем сердцем вашим.</div>
+                        <div id="v-ru-ref">Jeremiah 29:13</div>
                     </div>
                 </div>
             </div>
@@ -280,100 +139,94 @@
         <!-- Screenshot 2 -->
         <div class="screenshot-wrapper">
             <div class="screenshot-label">② Word Study Mode</div>
-            <div class="screenshot-desc">English word highlighted. Russian translation shown below.</div>
+            <div class="screenshot-desc">English word highlighted in the verse. No frame, no distraction.</div>
 
             <div class="versio-panel">
-                <div class="panel-header">Designed by Maestro</div>
                 <div class="panel-content">
                     <div id="verse-section">
-                        <div id="v-en">For God so loved the world that he gave his one and only Son, that <span class="hl">whoever</span> believes in him shall not perish but have eternal life.</div>
-                        <div id="v-ref">John 3:16</div>
+                        <div id="v-en">In whom we have <span class="hl">redemption</span> through his blood, even the forgiveness of sins.</div>
+                        <div id="v-ref">Colossians 1:14</div>
                     </div>
 
                     <div id="word-section">
-                        <div id="w-en">whoever</div>
-                        <div id="word-counter">2 / 8</div>
+                        <div id="w-en">redemption</div>
+                        <div id="word-counter">2 / 3</div>
                     </div>
 
                     <div id="ex-box">
                         <div class="lbl">Example</div>
-                        <div id="ex-en">Whoever wants to succeed must work hard.</div>
+                        <div id="ex-en">The novel's ending offered a quiet moment of redemption.</div>
                     </div>
 
                     <div id="synodal-box">
-                        <div id="synodal-lbl">Перевод стиха</div>
-                        <div id="v-ru">Ибо так возлюбил Бог мир, что отдал Сына Своего единородного, дабы всякий верующий в Него, не погибал, но имел жизнь вечную.</div>
-                        <div id="v-ru-ref">John 3:16</div>
+                        <div id="v-ru">в Котором мы имеем искупление Кровию Его и прощение грехов,</div>
+                        <div id="v-ru-ref">Colossians 1:14</div>
                     </div>
                 </div>
             </div>
-            <div class="info">Every word has a dictionary example</div>
+            <div class="info">Every word has a dictionary example — with a fallback source</div>
         </div>
 
         <!-- Screenshot 3 -->
         <div class="screenshot-wrapper">
             <div class="screenshot-label">③ Next Verse Navigation</div>
-            <div class="screenshot-desc">Click on verse section to load next passage</div>
+            <div class="screenshot-desc">Click the verse to move to the next citation from today's lesson</div>
 
             <div class="versio-panel">
-                <div class="panel-header">Designed by Maestro</div>
                 <div class="panel-content">
                     <div id="verse-section">
-                        <div id="v-en">The Lord is my shepherd; I shall not want. He maketh me to lie down in green pastures: he leadeth me beside the still waters.</div>
-                        <div id="v-ref">Psalm 23:1-2</div>
+                        <div id="v-en">Wherefore he is able also to save them to the uttermost that come unto God by him, seeing he ever liveth to make intercession for them.</div>
+                        <div id="v-ref">Hebrews 7:25</div>
                     </div>
 
                     <div id="word-section">
-                        <div id="w-en">shepherd</div>
-                        <div id="word-counter">1 / 9</div>
+                        <div id="w-en">intercession</div>
+                        <div id="word-counter">1 / 6</div>
                     </div>
 
                     <div id="ex-box">
                         <div class="lbl">Example</div>
-                        <div id="ex-en">The shepherd guides the flock through the valley.</div>
+                        <div id="ex-en">Her intercession on his behalf changed the outcome of the meeting.</div>
                     </div>
 
                     <div id="synodal-box">
-                        <div id="synodal-lbl">Перевод стиха</div>
-                        <div id="v-ru">Господь — мой Пастырь; я ни в чём не буду нуждаться. Он дозволяет мне отдыхать на зелёных пастбищах; Он ведёт меня к тихим водам.</div>
-                        <div id="v-ru-ref">Psalm 23:1-2</div>
+                        <div id="v-ru">посему и может всегда спасать приходящих чрез Него к Богу, будучи всегда жив, чтобы ходатайствовать за них.</div>
+                        <div id="v-ru-ref">Hebrews 7:25</div>
                     </div>
                 </div>
             </div>
-            <div class="info">Today's lesson provides multiple passages</div>
+            <div class="info">Today's lesson yields several distinct citations, not one repeated verse</div>
         </div>
 
         <!-- Screenshot 4 -->
         <div class="screenshot-wrapper">
-            <div class="screenshot-label">④ Dual Language Support</div>
-            <div class="screenshot-desc">English (KJV) above, Russian (Synodal) below</div>
+            <div class="screenshot-label">④ Dual Language</div>
+            <div class="screenshot-desc">English (KJV) above, Russian (Synodal) below — same reference, exact text</div>
 
             <div class="versio-panel">
-                <div class="panel-header">Designed by Maestro</div>
                 <div class="panel-content">
                     <div id="verse-section">
-                        <div id="v-en">I am the <span class="hl">resurrection</span> and the life: he that believeth in me, though he were dead, yet shall he live.</div>
-                        <div id="v-ref">John 11:25</div>
+                        <div id="v-en">My son, <span class="hl">give</span> me thine heart, and let thine eyes observe my ways.</div>
+                        <div id="v-ref">Proverbs 23:26</div>
                     </div>
 
                     <div id="word-section">
-                        <div id="w-en">resurrection</div>
-                        <div id="word-counter">1 / 11</div>
+                        <div id="w-en">give</div>
+                        <div id="word-counter">1 / 3</div>
                     </div>
 
                     <div id="ex-box">
                         <div class="lbl">Example</div>
-                        <div id="ex-en">The resurrection of the ancient tradition brought new hope to the community.</div>
+                        <div id="ex-en">Would you give me a moment to think it over?</div>
                     </div>
 
                     <div id="synodal-box">
-                        <div id="synodal-lbl">Перевод стиха</div>
-                        <div id="v-ru">Я есмь воскресение и жизнь; верующий в Меня, если и умрёт, оживёт.</div>
-                        <div id="v-ru-ref">John 11:25</div>
+                        <div id="v-ru">Сын мой! отдай сердце твое мне, и глаза твои да наблюдают пути мои,</div>
+                        <div id="v-ru-ref">Proverbs 23:26</div>
                     </div>
                 </div>
             </div>
-            <div class="info">Live data from SDARM + Synodal translation</div>
+            <div class="info">Live data from SDARM + exact Synodal translation</div>
         </div>
     </div>
 
@@ -381,13 +234,13 @@
     <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 30px; margin-top: 60px;">
         <h2 style="color: #fff; margin-bottom: 20px; font-size: 18px; font-weight: 400;">Key Features</h2>
         <ul style="color: #aaa; line-height: 2; font-size: 13px; list-style: none;">
-            <li>✨ <strong>Live SDARM Data</strong> — Pulls today's lesson from SDARM in real-time</li>
-            <li>✨ <strong>Dual Language</strong> — English (KJV) + Russian (Synodal) translations</li>
-            <li>✨ <strong>Vocabulary Study</strong> — Auto-extract meaningful words, click to advance</li>
-            <li>✨ <strong>Dictionary Integration</strong> — Real examples from dictionaryapi.dev</li>
-            <li>✨ <strong>Offline Mode</strong> — Fallback passages included</li>
-            <li>✨ <strong>Minimal UI</strong> — Dark theme, optimized for focus</li>
-            <li>✨ <strong>No Config Needed</strong> — Drop into CEP extensions, Photoshop finds it</li>
+            <li>Live SDARM Data — pulls today's lesson citations and resolves them against the full Bible text</li>
+            <li>Dual Language — English (KJV) + Russian (Synodal), exact quoted wording</li>
+            <li>Vocabulary Study — auto-extract meaningful words, click to advance</li>
+            <li>Dictionary Fallback — Free Dictionary API first, Wiktionary if no example</li>
+            <li>Offline Mode — fallback passage included</li>
+            <li>Minimal UI — dark theme, fixed size, text auto-shrinks to always fit</li>
+            <li>Two Editions — UXP (Photoshop 2024–2026+) and CEP (Photoshop 2020–2025)</li>
         </ul>
     </div>
 
