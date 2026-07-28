@@ -8,7 +8,7 @@ Daily Scripture lessons while you work.
 
 [![Download](https://img.shields.io/badge/Download-v5.1.0-blue.svg)](https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/releases/download/v5.1.0/VERSIO.zip)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-![Photoshop](https://img.shields.io/badge/Photoshop-2020%E2%80%942026-blue.svg)
+![Photoshop](https://img.shields.io/badge/Photoshop-2020%E2%80%942025-blue.svg)
 
 [What is VERSIO?](#what-is-versio) • [Install](#quick-install) • [How to Use](#how-to-use) • [Features](#features)
 
@@ -195,9 +195,11 @@ Drop the panel in your CEP extensions folder. Photoshop finds it. No config file
 | **Type** | CEP Panel (CEP 10.0) |
 | **Language** | HTML5 + Vanilla JavaScript |
 | **Size** | ~50 KB |
-| **Photoshop** | 2020 (v21.0) through 2026 and later |
+| **Photoshop** | 2020 (v21.0) through 2025 (v26.x), confirmed |
 | **OS** | macOS 10.13+, Windows 7+ |
 | **Internet** | Required on first load; works offline after |
+
+Photoshop 2026 removed classic CEP extension loading for third-party panels — see [Troubleshooting](#troubleshooting).
 
 ### Architecture
 
@@ -213,21 +215,33 @@ VERSIO/
 **Manifest** (CEP 10.0):
 - Extension ID: `versio`
 - Version: 5.1.0
-- Size: 300×550 pixels
-- Target: Photoshop 21.0–999.0 (2020–2026+)
+- Size: 300×550 pixels (fixed — not resizable, by design)
+- Target: Photoshop 21.0–99.9 (2020–2025)
 
 ---
 
 ## Troubleshooting
 
-### Panel doesn't appear in Window menu
+### Photoshop 2026 doesn't show the panel at all
+
+VERSIO is a **CEP panel** — the extension format Adobe has been retiring in favor of **UXP**. In our own testing, Photoshop 2025 (v26.8) loads CEP panels normally and logs their startup in `~/Library/Logs/CSXS/`. Photoshop 2026 (v27.5) produced **no CEP log activity whatsoever** for any third-party panel, even though the manifest and installation were correct — strongly suggesting Photoshop 2026 no longer scans the classic CEP extensions folder for third-party panels.
+
+**What this means:**
+- **Photoshop 2020–2025**: VERSIO works as documented below.
+- **Photoshop 2026**: CEP panels may not appear in the Window menu at all, regardless of manifest settings. This is a platform limitation, not a bug in the panel.
+
+**Workaround:** Run VERSIO in Photoshop 2025 or earlier until a UXP version is available. A UXP port is on the [roadmap](#roadmap).
+
+If you're on 2026 and want to help test this further, open an [issue](https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/issues) with your exact Photoshop build number.
+
+### Panel doesn't appear in Window menu (2020–2025)
 
 **Solution:**
 1. Verify VERSIO folder is in correct location:
    - **Mac**: `~/Library/Application Support/Adobe/CEP/extensions/VERSIO`
    - **Windows**: `C:\Users\<You>\AppData\Roaming\Adobe\CEP\extensions\VERSIO`
 2. Restart Photoshop completely
-3. Check Adobe logs: `~/Library/Logs/Adobe/CEP/PSXS.log` (Mac)
+3. Check Adobe logs: `~/Library/Logs/CSXS/` (Mac) — look for a `VERSIO` log file after launch. No file means Photoshop never attempted to load it.
 
 ### "No verses found" message
 
@@ -253,6 +267,7 @@ VERSIO/
 
 Planned features:
 
+- **UXP port (priority)** — required for Photoshop 2026 and later
 - Offline lesson caching (pre-download quarters)
 - Custom date selection (not just today)
 - Memory quiz mode
