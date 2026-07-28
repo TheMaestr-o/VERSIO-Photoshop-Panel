@@ -8,7 +8,7 @@ Daily Scripture lessons while you work.
 
 [![Download](https://img.shields.io/badge/Download-v5.0.0-blue.svg)](https://github.com/TheMaestr-o/VERSIO-Photoshop-Panel/releases/download/v5.0.0/VERSIO.zip)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-![Photoshop](https://img.shields.io/badge/Photoshop-2020%2B-blue.svg)
+![Photoshop](https://img.shields.io/badge/Photoshop-2020%E2%80%942026-blue.svg)
 
 [What is VERSIO?](#what-is-versio) • [Install](#quick-install) • [How to Use](#how-to-use) • [Features](#features)
 
@@ -204,7 +204,7 @@ Drop the panel in your CEP extensions folder. Photoshop finds it. No config file
 | **Type** | CEP Panel (CEP 10.0) |
 | **Language** | HTML5 + Vanilla JavaScript |
 | **Size** | ~50 KB |
-| **Photoshop** | 2020 (v21.0) and later |
+| **Photoshop** | 2020 (v21.0) through 2026 and later |
 | **OS** | macOS 10.13+, Windows 7+ |
 | **Internet** | Required on first load; works offline after |
 
@@ -221,9 +221,9 @@ VERSIO/
 
 **Manifest** (CEP 10.0):
 - Extension ID: `versio`
-- Version: 5.0.0
+- Version: 5.1.0
 - Size: 300×550 pixels
-- Target: Photoshop 21.0+
+- Target: Photoshop 21.0–999.0 (2020–2026+)
 
 ---
 
